@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nafila Khoirunnisa_117220010_Tugas 3</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .hero {
+      height: 100vh;
+      background: url("gambar home.png") center/cover no-repeat;
+      position: relative;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+    }
+    .hero .content {
+      position: relative;
+      z-index: 1;
+    }
+    footer {
+      background: #f8d775;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
+    .text-justify {
+    text-align: justify;
+  }
+  #apa-itu p {
+  text-align: justify;
+}
+    
+  </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-warning sticky-top shadow">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <img src="LOGO UPN.png" height="40">
+      <img src="LOGO PRODI.png" height="40">
+      <span><strong>Teknik Geomatika</strong><br><small>UPN "Veteran" Yogyakarta</small></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navmenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Profil</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#apa-itu">Apa itu Teknik Geomatika?</a></li>
+            <li><a class="dropdown-item" href="#visi-misi">Visi & Misi</a></li>
+            <li><a class="dropdown-item" href="#kegiatan-akademik">Dokumentasi Kegiatan Akademik</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="offcanvas" href="#offcanvasKBK">KBK</a></li>
+        <li class="nav-item"><a class="nav-link" href="#footer">Kontak</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section id="beranda" class="hero">
+  <div class="content">
+    <h1 class="display-3 fw-bold">TEKNIK GEOMATIKA</h1>
+    <p class="lead">Universitas Pembangunan Nasional “Veteran” Yogyakarta</p>
+  </div>
+</section>
+
+<!-- Apa itu -->
+<section id="apa-itu" class="container py-5">
+  <h2 class="text-center mb-4 ">Apa itu Teknik Geomatika?</h2>
+      <p>Pengukuran dan pemantauan terkait kondisi kebumian dan lingkungan menjadi semakin penting seiring dengan bertambahnya populasi manusia, pemanfaatan lahan, perubahan nilai tanah, ketersediaan dan pemanfaatan sumberdaya alam, serta berbagai aktivitas manusia yang memanfaatkan teknologi. Saat ini data dan informasi memiliki value yang sangat tinggi dalam kehidupan sehari-hari. Sebelum abad ke-20, belum ada begitu banyak informasi yang tersedia untuk menilai kondisi terkini, pembuatan keputusan dalam perencanaan yang tepat, dan merumuskan kebijakan berbasis data spasial untuk pengembangan sumberdaya dan pelestarian lingkungan.</p>
+      <p>Teknik geomatika lahir sebagai keilmuan modern yang mempelajari terkait pengumpulan, distribusi, penyimpanan, pemrosesan, pemodelan, analisis, dan presentasi data atau informasi geospasial. Disiplin ilmu Teknik Geomatika merupakan pengembangan dan integrasi dari Ilmu Geodesi dan Survei Pemetaan. Geomatika berasal dari bahsa Perancis “géomatique” yang berarti “geo” (Bumi) dan “informatika” (informasi + otomatisasi). Beberapa sumber lain mengartikan bahwa Geomatika berasal dari dua kata "Geodesi + Geoinformatika) atau dalam bahasa Latin, Geomatics sering disebut dengan Geomatica (Ipbuker, 2008, Kemp, 2007, Yavasoglu et al. 2009).</p>
+      <p>Teknik Geomatika merupakan jawaban dari perkembangan IPTEK dan peradaban umat manusia. Terdapat beberapa kelompok bidang keahlian (KBK) menjadi empat konsentrasi utama—KBK Survei Terestris, KBK Sistem Informasi Geografis, KBK Penginderaan Jauh, dan KBK Fotogrametri—program ini dirancang untuk menghasilkan lulusan yang komprehensif dan memiliki keahlian khusus yang relevan dengan tantangan industri dan lingkungan saat ini.</p>
+    </section>
+
+<!-- Visi Misi -->
+<section id="visi-misi" class="container py-5">
+  <h2 class="text-center mb-4">Visi & Misi</h2>
+  <div class="accordion" id="visiMisiAccordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#visi">Visi</button>
+      </h2>
+      <div id="visi" class="accordion-collapse collapse show" data-bs-parent="#visiMisiAccordion">
+        <div class="accordion-body text-justify">
+          Menjadi program studi Teknik Geomatika terkemuka yang bercirikan kebumian, berwawasan kebangsaan, dan berkarakter bela negara, serta berperan aktif dalam pembangunan berkelanjutan dan ketahanan nasional.
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#misi">Misi</button>
+      </h2>
+      <div id="misi" class="accordion-collapse collapse" data-bs-parent="#visiMisiAccordion">
+        <div class="accordion-body text-justify">
+          1. Pendidikan: Menyelenggarakan pendidikan Teknik Geomatika yang mengedepankan kajian kebumian, dengan menanamkan wawasan kebangsaan dan karakter bela negara kepada mahasiswa.<br>
+          2. Penelitian: Mengembangkan penelitian yang berfokus pada pengelolaan sumber daya alam, pemetaan wilayah strategis, dan mitigasi bencana dengan pendekatan kebumian serta berkontribusi pada ketahanan nasional.<br>
+          3. Pengabdian kepada Masyarakat: Menerapkan hasil penelitian dan teknologi geomatika dalam pengabdian masyarakat untuk mendukung pembangunan berkelanjutan, pengelolaan lingkungan, dan penguatan ketahanan nasional.<br>
+          4. Kolaborasi: Menjalin kemitraan strategis dengan pemerintah, TNI, dan industri untuk mengintegrasikan wawasan kebangsaan dan bela negara dalam pengembangan teknologi geomatika.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dokumentasi Kegiatan Akademik -->
+<section id="kegiatan-akademik" class="container py-5">
+  <h2 class="text-center mb-4">Dokumentasi Kegiatan Akademik</h2>
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card">
+        <img src="sig.jpg" class="object-fit-contain border rounded">
+        <div class="card-body text-center">
+          <h5>Praktikum</h5>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPraktikum">Lihat Gambar</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <img src="kk4.jpg" class="object-fit-contain border rounded">
+        <div class="card-body text-center">
+          <h5>Kemah Kerja</h5>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalKemah">Lihat Gambar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal Praktikum -->
+<div class="modal fade" id="modalPraktikum" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <div id="carouselPraktikum" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active"><img src="sig.jpg" class="d-block w-100"></div>
+            <div class="carousel-item"><img src="fotri.jpg" class="d-block w-100"></div>
+            <div class="carousel-item"><img src="sutris.jpg" class="d-block w-100"></div>
+            <div class="carousel-item"><img src="pj.jpg" class="d-block w-100"></div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselPraktikum" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselPraktikum" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Kemah -->
+<div class="modal fade" id="modalKemah" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <div id="carouselKemah" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active"><img src="kk1.jpg" class="d-block w-100"></div>
+            <div class="carousel-item"><img src="kk2.jpg" class="d-block w-100"></div>
+            <div class="carousel-item"><img src="kk3.jpg" class="d-block w-100"></div>
+            <div class="carousel-item"><img src="kk4.jpg" class="d-block w-100"></div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselKemah" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselKemah" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Offcanvas KBK -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasKBK">
+  <div class="offcanvas-header">
+    <h5>Kelompok Bidang Keahlian</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <button class="btn btn-outline-dark w-100 mb-2 kbk-btn" data-target="kbk-terestris">KBK Terestris</button>
+    <button class="btn btn-outline-dark w-100 mb-2 kbk-btn" data-target="kbk-sig">KBK Sistem Informasi Geografis</button>
+    <button class="btn btn-outline-dark w-100 mb-2 kbk-btn" data-target="kbk-fotogrametri">KBK Fotogrametri</button>
+    <button class="btn btn-outline-dark w-100 kbk-btn" data-target="kbk-penginderaan">KBK Penginderaan Jauh</button>
+  </div>
+</div>
+
+<!-- KBK Pages -->
+<section id="kbk" class="container py-5">
+  <div id="kbk-terestris" class="kbk-page d-none">
+    <div class="card shadow-sm mb-4">
+    <div class="card-body d-flex align-items-start gap-4">
+      <!-- Teks -->
+      <div class="flex-grow-1">
+        <h2 class="card-title">KBK Terestris</h2>
+        <p class="card-text" style="text-align: justify;">
+    Salah satu mata kuliah yang termasuk dalam KBK Terestris adalah Survei Terestris. Pada mata kuliah ini mahasiswa mempelajari teknik pengukuran darat menggunakan instrumen seperti theodolite, total station, dan waterpass. Mahasiswa juga dikenalkan pada prinsip dasar geodesi serta metode pemetaan yang diperlukan untuk menggambarkan kondisi permukaan bumi secara akurat.</p>
+    <p class="card-text" style="text-align: justify;"> Pemahaman metode survei dan pengolahan data terestris menjadi keterampilan penting bagi mahasiswa. Kegiatan pembelajaran tidak hanya dilakukan melalui praktik lapangan, tetapi juga melalui pengolahan data hasil pengukuran menjadi peta topografi maupun peta tematik. Materi ini kemudian dapat dikembangkan lebih lanjut dalam pemantauan lingkungan, penentuan batas wilayah, serta penelitian kebumian lainnya.</p>
+ </div>
+   <!-- Gambar -->
+      <img src="gambar sutris.png" alt="Sutris" class="img-fluid rounded" style="max-width:250px; margin-top:60px;"> 
+  </div>
+  </div>
+  </div>
+
+  <div id="kbk-sig" class="kbk-page d-none">
+    <div class="card shadow-sm mb-4">
+    <div class="card-body d-flex align-items-start gap-4">
+      <!-- Teks -->
+      <div class="flex-grow-1">
+        <h2 class="card-title">KBK Sistem Informasi Geografis</h2>
+        <p class="card-text" style="text-align: justify;">
+    Salah satu mata kuliah yang termasuk dalam KBK Sistem Infromasi Geografis (SIG) adalah SIG Berbasis Internet. Pada mata kuliah ini mahasiswa mempelajari pengaplikasian SIG dengan berbasis pada platform internet. Mahasiswa mempelajari konsep kerja internet, proses request dan respond oleh user dan client, serta pembangunan website itu sendiri.</p>
+    <p class="card-text" style="text-align: justify;"> Memahami HTML dan CSS merupakan langkah selanjutnya bagi mahasiswa yang membuat halaman website. Kali ini, salah satu tugas adalah membangun tampilan halaman web sederhana ini. Selanjutnya halaman sederhana ini dikembangkan kembali dengan mengaplikasikan penggunaan Bootstrap.</p>
+    </div>
+   <!-- Gambar -->
+      <img src="gambar sig.jpg" alt="SIG" class="img-fluid rounded" style="max-width:250px; margin-top:60px;">
+  </div>
+  </div>
+  </div>
+
+  <div id="kbk-fotogrametri" class="kbk-page d-none">
+    <div class="card shadow-sm mb-4">
+    <div class="card-body d-flex align-items-start gap-4">
+      <!-- Teks -->
+      <div class="flex-grow-1">
+        <h2 class="card-title">KBK Fotogrametri</h2>
+        <p class="card-text" style="text-align: justify;">
+    Salah satu mata kuliah yang termasuk dalam KBK Fotogrametri adalah Penginderaan Fotogrametri. Pada mata kuliah ini mahasiswa mempelajari cara memperoleh data spasial melalui foto udara yang diambil menggunakan pesawat, drone, maupun satelit. Mahasiswa juga dikenalkan pada teknik interpretasi citra dan pembuatan peta dari hasil foto udara tersebut.</p>
+    <p class="card-text" style="text-align: justify;">Fotogrametri memiliki peran penting dalam pemetaan topografi, pemantauan perubahan lingkungan, serta analisis spasial lainnya. Kegiatan pembelajaran melibatkan praktik pengolahan citra, kalibrasi kamera, serta pembuatan model 3D dari data fotogrametri. Materi ini dapat diterapkan dalam berbagai bidang seperti perencanaan tata ruang, manajemen sumber daya alam, dan mitigasi bencana.</p>
+  </div>
+   <!-- Gambar -->
+      <img src="gambar fotri.jpg" alt="Fotogrametri" class="img-fluid rounded" style="max-width:250px; margin-top:60px;">
+  </div>
+    </div>
+  </div>
+
+  <div id="kbk-penginderaan" class="kbk-page d-none">
+     <div class="card shadow-sm mb-4">
+    <div class="card-body d-flex align-items-start gap-4">
+      <!-- Teks -->
+      <div class="flex-grow-1">
+        <h2 class="card-title">KBK Penginderaan Jauh</h2>
+        <p class="card-text" style="text-align: justify;">
+    Salah satu mata kuliah yang termasuk dalam KBK Penginderaan Jauh adalah Analisis Citra Satelit. Pada mata kuliah ini mahasiswa mempelajari cara memperoleh data spasial dari sensor satelit maupun drone, kemudian menganalisisnya untuk berbagai keperluan kebumian. Mahasiswa dikenalkan pada prinsip dasar interaksi gelombang elektromagnetik dengan permukaan bumi serta teknik interpretasi citra.</p> 
+    <p class="card-text" style="text-align: justify;">Pemahaman penginderaan jauh memungkinkan mahasiswa untuk mengidentifikasi objek dan fenomena di permukaan bumi secara efisien. Melalui pengolahan citra digital, mahasiswa dapat menghasilkan peta tutupan lahan, pemantauan bencana, maupun analisis perubahan lingkungan. Ilmu ini menjadi salah satu keterampilan penting dalam kajian geomatika modern yang mendukung pengelolaan sumber daya alam dan penelitian kebumian.</p>
+  </div>
+   <!-- Gambar -->
+      <img src="gambar pj.jpg" alt="Penginderaan Jauh" class="img-fluid rounded" style="max-width:250px; margin-top:60px;">
+  </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer id="footer">
+  <div class="container text-center">
+    <p><strong>Program Studi Teknik Geomatika</strong><br>
+    Fakultas Teknologi Mineral dan Energi<br>
+    UPN "Veteran" Yogyakarta<br>
+    Jl. Padjajaran, Sleman, Yogyakarta, Indonesia. 55283<br>
+    <a href="mailto:teknikgeomatika@upnyk.ac.id">teknikgeomatika@upnyk.ac.id</a></p>
+    <hr>
+    <p class="fw-bold">Copyright @Nafila Khoirunnisa_117220010</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // KBK Toggle
+  const kbkButtons = document.querySelectorAll('.kbk-btn');
+  kbkButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.kbk-page').forEach(pg=>pg.classList.add('d-none'));
+      document.getElementById(btn.dataset.target).classList.remove('d-none');
+      document.querySelector('#offcanvasKBK .btn-close').click();
+      document.getElementById('kbk').scrollIntoView({behavior: 'smooth'});
+    });
+  });
+</script>
+</body>
+</html>
