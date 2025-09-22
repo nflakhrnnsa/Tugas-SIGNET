@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Peta Statis & Dinamis – Teknik Geomatika</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Hero */
+    .hero {
+      background: url("gambar-peta-header.jpg") center/cover no-repeat;
+      min-height: 50vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(63, 55, 13, 0.644);
+    }
+    .hero .content { position: relative; z-index: 1; }
+
+    section { padding: 60px 0; }
+    .fade-in { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+    .fade-in.show { opacity: 1; transform: translateY(0); }
+
+    footer {
+      background: #f8d775;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
+    .map-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      overflow: hidden;
+      margin-bottom: 60px;
+    }
+    .map-card img { width: 100%; height: auto; display: block; }
+    .map-card .card-body { padding: 25px; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-warning sticky-top shadow">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+      <img src="LOGO UPN.png" height="40" alt="Logo UPN">
+      <img src="LOGO PRODI.png" height="40" alt="Logo Prodi">
+      <span><strong>Teknik Geomatika</strong><br><small>UPN "Veteran" Yogyakarta</small></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navmenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">Peta</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="petasd.html">Peta Statis & Peta Dinamis</a></li>
+            <li><a class="dropdown-item" href="Petaint.html">Peta Interaktif</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#footer">Kontak</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="content">
+    <h1 class="fw-bold display-5">Peta Statis & Peta Dinamis</h1>
+    <p class="lead">Penjelasan dan Contoh Visual</p>
+  </div>
+</section>
+
+<!-- Penjelasan Umum -->
+<section id="penjelasan" class="fade-in">
+  <div class="container">
+    <h2 class="mb-4 text-center fw-bold">Apa itu Peta?</h2>
+    <p class="text-justify mx-auto" style="max-width: 850px;">
+      Peta adalah representasi grafis permukaan bumi yang menyajikan informasi spasial melalui simbol, warna,
+      dan garis. Berdasarkan sifatnya, peta dibagi menjadi dua:
+      <strong>peta statis</strong> dan <strong>peta dinamis</strong>.
+      <br><br>
+      <strong>Peta statis</strong> bersifat tetap: isi dan tampilannya tidak berubah, misalnya peta administrasi atau peta topografi.<br>
+      <strong>Peta dinamis</strong> dapat diperbarui secara berkala atau menampilkan data terbaru secara real-time
+      meski pengguna tidak perlu berinteraksi. Contohnya peta jumlah penduduk yang diperbarui setiap rilis data baru.
+    </p>
+  </div>
+</section>
+
+<!-- Peta Statis -->
+<section id="peta-statis" class="bg-light fade-in">
+  <div class="container">
+    <div class="map-card">
+      <img src="petastatis.png" alt="Peta Statis DIY">
+      <div class="card-body">
+        <h3 class="fw-bold text-center mb-3">Contoh Peta Statis</h3>
+        <p class="text-justify">
+          Peta batas administrasi Kabupaten/Kota Daerah Istimewa Yogyakarta. Informasi seperti garis batas wilayah
+          dan nama kabupaten tidak berubah dari waktu ke waktu, sehingga tergolong peta statis.
+          <br><strong>Sumber:</strong> Badan Informasi Geografis.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Peta Dinamis -->
+<section id="peta-dinamis" class="fade-in">
+  <div class="container">
+    <div class="map-card">
+      <!-- Atur rasio agar proporsional dan tidak muncul scroll -->
+      <div class="ratio" style="--bs-aspect-ratio:60%;">
+        <iframe
+          title="Jumlah Penduduk (Jiwa) Kota Bandung 2020"
+          aria-label="Peta dinamis (tidak interaktif)"
+          src="https://datawrapper.dwcdn.net/lvez2/3/"
+          frameborder="0"
+          style="width:100%; height:100%; border:none;"
+          loading="lazy">
+        </iframe>
+      </div>
+      <div class="card-body">
+        <h3 class="fw-bold text-center mb-3">Contoh Peta Dinamis</h3>
+        <p class="text-justify">
+          Peta jumlah penduduk Kota Bandung tahun 2020 yang
+          bersumber dari <strong>Badan Pusat Statistik (BPS) Kota Bandung</strong> melalui laman resmi <a href="https://bandungkota.bps.go.id/id" target="_blank">https://bandungkota.bps.go.id/id</a>.
+          Peta ini digolongkan sebagai
+          <strong>peta dinamis</strong> karena datanya dapat diperbarui secara real-time
+          saat BPS merilis angka populasi terbaru. Setiap pembaruan data akan otomatis
+          tercermin pada peta tanpa perlu mengubah kode HTML.
+          <br><strong>Sumber Data:</strong> BPS Kota Bandung (2020).
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer id="footer">
+  <div class="container text-center">
+    <p><strong>Program Studi Teknik Geomatika</strong><br>
+    Fakultas Teknologi Mineral dan Energi<br>
+    UPN "Veteran" Yogyakarta<br>
+    Jl. Padjajaran, Sleman, Yogyakarta, Indonesia. 55283<br>
+    <a href="mailto:teknikgeomatika@upnyk.ac.id">teknikgeomatika@upnyk.ac.id</a></p>
+    <hr>
+    <p class="fw-bold">&copy; 2025 Nafila Khoirunnisa_117220010</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Animasi fade-in saat scroll
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('show');
+    });
+  }, { threshold: 0.2 });
+  fadeElements.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
