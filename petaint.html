@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Peta Asrama — Teknik Geomatika (FINAL)</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-control-search/2.9.9/leaflet-search.min.css"/>
+
+  <style>
+    :root{ --warm:#F4C542; --muted:#fbf8f2; --card-shadow:0 12px 36px rgba(2,6,23,0.08); --accent:#222; }
+    html,body{ height:100%; margin:0; font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial; background:#fff; color:var(--accent); }
+    a{ text-decoration:none; color:inherit; }
+
+    .site-header{ background:#ffc505; border-bottom:1px solid #e7c21a; position:sticky; top:0; z-index:4000; }
+    .logo-img{ height:44px; object-fit:contain; }
+
+    .hero { width:100vw; margin-left:calc(-50vw + 50%); height:48vh; min-height:260px; background-size:cover; background-position:center; position:relative; display:flex; align-items:center; justify-content:center; }
+    .hero::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.35)); }
+    .hero-inner{ position:relative; z-index:2; text-align:left; color:#fff; padding:1rem; max-width:1180px; width:100%; }
+    .hero h1{ font-size:clamp(24px,4.2vw,48px); font-weight:700; margin:0; }
+    .hero p, .hero small{ opacity:0.95; }
+
+    main.container{ max-width:1180px; margin-top:1.5rem; margin-bottom:2.5rem; }
+    .info-cards .card{ border-radius:10px; box-shadow:var(--card-shadow); }
+
+    .map-wrap{ position:relative; margin-top:1.5rem; }
+    #map{ width:100%; height:72vh; border-radius:10px; box-shadow:var(--card-shadow); }
+
+    #sidebar { position:absolute; right:760px; top:92px; width:340px; max-height:72vh; overflow:auto; background:#fff; border-radius:10px; padding:14px; box-shadow:0 18px 40px rgba(2,6,23,0.12); z-index:4200; display:none; }
+    #sidebar h6{ margin-bottom:8px; font-weight:700; color:#222; }
+
+    
+    .basemap-panel{ position:absolute; right:720px; top:50px; z-index:4100; display:none; background:#fff; padding:10px; border-radius:10px; box-shadow:0 18px 40px rgba(2,6,23,0.12); }
+    .basemap-item{ text-align:center; cursor:pointer; padding:6px; display:inline-block; margin-right:6px; }
+    .basemap-item img{ width:100px; height:72px; object-fit:cover; border-radius:6px; border:2px solid transparent; display:block; margin-bottom:6px; }
+    .basemap-item.active img{ border-color:var(--warm); }
+
+    .legend-panel{ position:absolute; right:940px; top:100px; z-index:4100; display:none; background:#fff; padding:10px; border-radius:10px; box-shadow:0 18px 40px rgba(2,6,23,0.12); }
+
+    .route-mode-panel{ position:absolute; right:18px; bottom:86px; z-index:4100; display:none; background:#fff; padding:10px; border-radius:8px; box-shadow:0 18px 40px rgba(2,6,23,0.12); }
+    .routing-instructions{ position:absolute; right:18px; top:140px; z-index:4100; width:360px; height:360px; background: rgba(0,0,0,0.78); color:#fff; border-radius:8px; overflow:auto; display:none; box-shadow:0 18px 40px rgba(2,6,23,0.3); }
+    .routing-instructions .summary{ padding:10px; border-bottom:1px solid rgba(255,255,255,0.06); font-weight:700; }
+    .routing-instructions .steps{ padding:10px; font-size:14px; line-height:1.45; }
+
+    .transport-panel { box-shadow:0 8px 20px rgba(0,0,0,0.12); }
+    .route-info { box-shadow:0 8px 20px rgba(0,0,0,0.12); }
+
+    @media (max-width:900px){
+      #sidebar{ left:12px; top:80px; width:86vw; }
+      .basemap-panel{ right:12px; top:84px; }
+      .hero{ height:40vh; min-height:220px; }
+      .routing-instructions{ display:none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <nav class="navbar container d-flex align-items-center justify-content-between py-3">
+      <div class="d-flex align-items-center">
+        <img src="LOGO PRODI.png" alt="UPN" class="logo-img me-2">
+        <img src="LOGO UPN.png" alt="Geomatika" class="logo-img me-3">
+        <div class="d-none d-md-block"><div style="font-weight:700">Teknik Geomatika</div></div>
+      </div>
+
+      <ul class="navbar-nav d-flex flex-row gap-4 nav-right">
+        <li class="nav-item"><a class="nav-link" href="https://nflakhrnnsa.github.io/Tugas-SIGNET/">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link" href="#info">Informasi</a></li>
+        <li class="nav-item"><a class="nav-link" href="#peta">Peta</a></li>
+        <li class="nav-item"><a class="nav-link" href="#footer">Kontak</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="hero" style="background-image:url('khataman.png');">
+    <div class="hero-inner container">
+      <h1>PONDOK PESANTREN AL-MUNAWWIR</h1>
+      <p>Peta Interaktif Pondok Pesantren Al-Munawwir</p>
+    </div>
+  </section>
+
+ <!-- MAIN -->
+<main class="container">
+  <section id="info" class="mb-4">
+    <div class="text-center mb-3">
+      <h3 style="color:#111; font-weight:700;">Informasi</h3>
+      <p class="text-muted">
+        Pondok Pesantren ini berada di Krapyak Kulon, Panggungharjo, Kec. Sewon, Kabupaten Bantul, Daerah Istimewa Yogyakarta 55188
+      </p>
+    </div>
+
+    <div class="row g-3 info-cards">
+      <div class="col-md-12">
+        <div class="card p-4" style="background-color:#fff8e1; border:none; border-radius:12px;">
+          <div class="row align-items-center">
+            
+            <!-- Kolom kiri: teks -->
+            <div class="col-md-7">
+              <h6 class="text-muted mb-2">Sejarah</h6>
+              <p style="text-align:justify; color:#333; font-size:16px;">
+                Pondok Pesantren Al Munawwir didirikan oleh KH. Muhammad Munawwir bin Abdullah Rosyad pada tanggal 15 November 1911 M.
+                Sejak awal berdirinya, pesantren ini semula bernama Pondok Pesantren Krapyak karena memang terletak di dusun Krapyak.
+                Pada tahun 1976-an, nama pondok pesantren tersebut ditambah menjadi “Al-Munawwir” untuk mengenang pendirinya yaitu KH. M. Munawwir.
+                Al-Qur’an menjadi ciri khas pendidikan pesantren ini sejak masa awal berdirinya.
+              </p>
+            </div>
+
+            <!-- Kolom kanan: gambar -->
+            <div class="col-md-5 text-center">
+              <img src="sejarah.png" alt="Pondok Pesantren Al Munawwir"
+                   class="img-fluid rounded shadow-sm" style="max-height:260px; object-fit:cover;">
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+    <!-- PETA -->
+    <section id="peta" class="map-wrap">
+      <div id="map"></div>
+
+     
+
+      <div id="sidebar" aria-hidden="true">
+        <h6>Pencarian</h6>
+        <input id="searchBox" class="form-control mb-2" placeholder="Cari Lokasi">
+        <div id="suggestList" class="list-group mb-2"></div>
+
+        <h6 class="mt-2">Kontrol Layer</h6>
+        <div id="layerControls" class="mb-3"></div>
+
+        <div class="d-grid gap-2">
+          <button id="btnChart" class="btn" style="background:var(--warm); color:#111;">Tampilkan Grafik</button>
+          <button id="btnZoomAll" class="btn btn-outline-secondary">Zoom Semua</button>
+        </div>
+      </div>
+
+      <div class="basemap-panel" id="basemapPanel" aria-hidden="true">
+        <div class="basemap-item active" data-bm="osm"><img src="https://a.tile.openstreetmap.org/0/0/0.png" alt="osm"><div style="font-size:12px">OSM</div></div>
+        <div class="basemap-item" data-bm="sat"><img src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/0/0/0" alt="sat"><div style="font-size:12px">Satellite</div></div>
+        <div class="basemap-item" data-bm="carto"><img src="https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/0/0/0.png" alt="carto"><div style="font-size:12px">CartoDB</div></div>
+      </div>
+
+      <div class="legend-panel" id="legendPanel">
+        <strong>Legenda</strong>
+        <ul class="list-unstyled mt-2 mb-0">
+          <li><span style="display:inline-block;width:12px;height:12px;background:#1f78b4;margin-right:8px;border-radius:3px;"></span>Pondok Putra</li>
+          <li><span style="display:inline-block;width:12px;height:12px;background:#33a02c;margin-right:8px;border-radius:3px;"></span>Pondok Putri</li>
+          <li><span style="display:inline-block;width:12px;height:12px;background:#ff7f00;margin-right:8px;border-radius:3px;"></span>Bangunan Umum</li>
+        </ul>
+      </div>
+
+      <!-- small route mode UI (legacy) -->
+      <div class="route-mode-panel" id="routeModePanel" style="display:none;">
+        <strong>Pilih Mode Rute</strong>
+        <div class="mt-2 d-grid gap-1">
+          <button class="btn btn-sm btn-outline-secondary route-mode" data-profile="car">Mobil</button>
+          <button class="btn btn-sm btn-outline-secondary route-mode" data-profile="motor">Motor</button>
+          <button class="btn btn-sm btn-outline-secondary route-mode" data-profile="foot">Jalan</button>
+          <button class="btn btn-sm btn-outline-secondary route-mode" data-profile="bike">Sepeda</button>
+        </div>
+        <div class="mt-2 small text-muted">Klik 2 titik di peta atau klik fitur untuk jadi titik rute.</div>
+      </div>
+
+      <div class="routing-instructions" id="routingInstructions" aria-hidden="true">
+        <div class="summary" id="routeSummary">Rute</div>
+        <div class="steps" id="routeSteps"></div>
+      </div>
+
+      <div class="modal fade" id="chartModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Grafik Jumlah</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body"><canvas id="chartCanvas"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer id="footer" style="background-color:#f8d775; padding:30px 0; border-top:1px solid #cfae47;">
+  <div class="container text-center">
+    <p style="margin-bottom:5px; font-weight:600;">Program Studi Teknik Geomatika</p>
+    <p style="margin-bottom:5px;">Fakultas Teknologi Mineral dan Energi</p>
+    <p style="margin-bottom:5px;">UPN "Veteran" Yogyakarta</p>
+    <p style="margin-bottom:5px;">Jl. Padjajaran, Sleman, Yogyakarta, Indonesia. 55283</p>
+    <p style="margin-bottom:15px;">
+      <a href="mailto:teknikgeomatika@upnyk.ac.id" style="color:#004aad; text-decoration:none;">
+        teknikgeomatika@upnyk.ac.id
+      </a>
+    </p>
+    <hr style="width:80%; margin:auto; border-top:1px solid #cfae47;">
+    <p style="margin-top:10px; font-weight:600;">
+      Copyright © <span id="year"></span> Nafila Khoirunnisa_117220010
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Supaya tahun otomatis muncul & tidak error kalau elemen nggak ada
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+</script>
+
+
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-control-search/2.9.9/leaflet-search.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <script>
+  // ================= CONFIG =================
+  // ORS API Key (kamu berikan sebelumnya) - ganti bila perlu
+  const ORS_API_KEY = '5b3ce3597851110001cf6248716c435cf01a47c58dec7afa9a54ab6b';
+
+  // basic init
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const map = L.map('map', { zoomControl:false, preferCanvas:true }).setView([-7.825743942088701, 110.36089223828876], 17);
+  L.control.zoom({ position:'bottomleft' }).addTo(map);
+
+  
+  // basemaps (OSM main)
+  const bm_osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{ maxZoom:19, attribution:'© OpenStreetMap contributors' }).addTo(map);
+  const bm_sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{ maxZoom:19 });
+  const bm_carto = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{ maxZoom:19 });
+
+  // Layers (created after onEachFeature is defined)
+  let putraLayer, putriLayer, umumLayer;
+
+  // counters and search
+  let counts = { putra:0, putri:0, umum:0 };
+  let searchIndex = [];
+  const indonesiaSuggestions = ['Piyungan','Bantul','Sleman','Yogyakarta','Gamping','Kasihan','Ngampilan','Banguntapan','Wonosari'];
+
+  // POPUP / onEachFeature
+  function onEachFeature(feature, layer){
+    const p = feature.properties || {};
+    const title = p.nama || p.Nama || p.name || p.title || 'Objek';
+    let html = `<div style="max-width:320px"><strong>${title}</strong><hr style="margin:6px 0" />`;
+    for(const k in p){ if(['nama','name','title','Nama'].includes(k)) continue; html += `<div><small><strong>${k}</strong>: ${p[k]}</small></div>`; }
+    html += '</div>';
+    layer.bindPopup(html, { maxWidth:340 });
+
+    layer.on('click', function(e){
+      if(routingActive) {
+        // when routing active, add as waypoint
+        addRoutingPoint(e.latlng);
+      } else {
+        layer.openPopup();
+      }
+    });
+
+    layer.feature = layer.feature || feature;
+    layer.feature.searchName = title;
+  }
+
+  // load GeoJSON (leaflet-ajax)
+  let layersLoaded = 0;
+  function loadGeoJSON(){
+    putraLayer = new L.GeoJSON.AJAX('asramaputra.geojson', { onEachFeature:onEachFeature, style: ()=>({ color:'#1f78b4', weight:2, fillOpacity:0.45 }) });
+    putriLayer = new L.GeoJSON.AJAX('asramaputri.geojson', { onEachFeature:onEachFeature, style: ()=>({ color:'#33a02c', weight:2, fillOpacity:0.45 }) });
+    umumLayer  = new L.GeoJSON.AJAX('bangunanumum.geojson', { onEachFeature:onEachFeature, style: ()=>({ color:'#ff7f00', weight:2, fillOpacity:0.45 }) });
+
+    putraLayer.on('data:loaded', (e)=> { try{ counts.putra = e.target.toGeoJSON().features.length; }catch(e){} updateCounts(); buildSearchIndex(); fitBoundsIfReady(); });
+    putriLayer.on('data:loaded', (e)=> { try{ counts.putri = e.target.toGeoJSON().features.length; }catch(e){} updateCounts(); buildSearchIndex(); fitBoundsIfReady(); });
+    umumLayer.on('data:loaded', (e)=>  { try{ counts.umum  = e.target.toGeoJSON().features.length; }catch(e){} updateCounts(); buildSearchIndex(); fitBoundsIfReady(); });
+
+    putraLayer.addTo(map);
+    putriLayer.addTo(map);
+    umumLayer.addTo(map);
+  }
+  loadGeoJSON();
+
+  function updateCounts(){
+    document.getElementById('count-putra').textContent = counts.putra || 0;
+    document.getElementById('count-putri').textContent = counts.putri || 0;
+    document.getElementById('count-umum').textContent = counts.umum || 0;
+  }
+
+  function fitBoundsIfReady(){
+    const fg = L.featureGroup();
+    [putraLayer,putriLayer,umumLayer].forEach(layer=>{
+      try{
+        layer.eachLayer(l=>{
+          if(l.getBounds && l.getBounds().isValid && l.getBounds().isValid()) fg.addLayer(l);
+          else if(l.getLatLng) fg.addLayer(l);
+          else fg.addLayer(l);
+        });
+      }catch(e){}
+    });
+    try{ if(fg.getBounds && fg.getBounds().isValid()) map.fitBounds(fg.getBounds().pad(0.12)); }catch(e){}
+  }
+
+  // Layer controls
+  function buildLayerControls(){
+    const holder = document.getElementById('layerControls');
+    holder.innerHTML = '';
+    const arr = [
+      {id:'putra', name:'Pondok Putra', layer:putraLayer, checked:true},
+      {id:'putri', name:'Pondok Putri', layer:putriLayer, checked:true},
+      {id:'umum', name:'Bangunan Umum', layer:umumLayer, checked:true}
+    ];
+    arr.forEach(o=>{
+      const row = document.createElement('div');
+      row.className = 'd-flex align-items-center justify-content-between mb-2';
+      row.innerHTML = `<div><strong>${o.name}</strong></div><div><input class="form-check-input" type="checkbox" id="sw_${o.id}" ${o.checked? 'checked':''}></div>`;
+      holder.appendChild(row);
+      const chk = row.querySelector('input');
+      chk.addEventListener('change', e=>{
+        if(e.target.checked) map.addLayer(o.layer); else map.removeLayer(o.layer);
+      });
+    });
+  }
+  setTimeout(buildLayerControls, 900);
+
+  // Search & suggestions
+  function buildSearchIndex(){
+    searchIndex = [];
+    [putraLayer,putriLayer,umumLayer].forEach(l=>{
+      try{
+        l.eachLayer(layer=>{
+          if(layer.feature && layer.feature.searchName){
+            const latlng = (layer.getBounds && layer.getBounds().getCenter) ? layer.getBounds().getCenter() : (layer.getLatLng? layer.getLatLng(): null);
+            searchIndex.push({ name: layer.feature.searchName, latlng, layerRef: layer });
+          }
+        });
+      }catch(e){}
+    });
+  }
+
+  const searchBox = document.getElementById('searchBox'), suggestList = document.getElementById('suggestList');
+  searchBox.addEventListener('input', ()=> {
+    const q = searchBox.value.trim().toLowerCase();
+    suggestList.innerHTML = '';
+    if(q.length < 2){
+      indonesiaSuggestions.filter(s=> s.toLowerCase().includes(q)).slice(0,6).forEach(s=>{
+        const a = document.createElement('a'); a.className='list-group-item list-group-item-action'; a.href='#'; a.textContent = s;
+        a.addEventListener('click', (e)=>{ e.preventDefault(); geocodeAndPan(s); suggestList.innerHTML=''; searchBox.value=''; document.getElementById('sidebar').style.display='none'; });
+        suggestList.appendChild(a);
+      });
+      return;
+    }
+    const matches = searchIndex.filter(i=> i.name.toLowerCase().includes(q)).slice(0,8);
+    matches.forEach(m=>{
+      const a = document.createElement('a'); a.className='list-group-item list-group-item-action'; a.href='#'; a.textContent = m.name;
+      a.addEventListener('click', (e)=> { e.preventDefault(); if(m.latlng) map.setView(m.latlng,17); if(m.layerRef && m.layerRef.openPopup) m.layerRef.openPopup(); suggestList.innerHTML=''; searchBox.value=''; document.getElementById('sidebar').style.display='none'; });
+      suggestList.appendChild(a);
+    });
+    indonesiaSuggestions.filter(s=> s.toLowerCase().includes(q)).slice(0,3).forEach(s=>{
+      const a = document.createElement('a'); a.className='list-group-item list-group-item-action text-muted'; a.href='#'; a.textContent = s + ' (lokasi umum)';
+      a.addEventListener('click',(e)=>{ e.preventDefault(); geocodeAndPan(s); suggestList.innerHTML=''; searchBox.value=''; document.getElementById('sidebar').style.display='none'; });
+      suggestList.appendChild(a);
+    });
+  });
+
+  function geocodeAndPan(text){
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(text)}&limit=1`)
+      .then(r=>r.json()).then(res=>{ if(res && res[0]) map.setView([res[0].lat,res[0].lon],14); })
+      .catch(e=>console.error('geocode',e));
+  }
+
+  
+  // Basemap panel
+  const basemapPanel = document.getElementById('basemapPanel');
+  document.querySelectorAll('.basemap-item').forEach(item=>{
+    item.addEventListener('click', ()=> {
+      document.querySelectorAll('.basemap-item').forEach(i=>i.classList.remove('active'));
+      item.classList.add('active');
+      const bm = item.dataset.bm;
+      [bm_osm,bm_sat,bm_carto].forEach(b=> map.removeLayer(b));
+      if(bm==='osm') bm_osm.addTo(map);
+      if(bm==='sat') bm_sat.addTo(map);
+      if(bm==='carto') bm_carto.addTo(map);
+    });
+  });
+
+  // Chart modal
+  const chartModal = new bootstrap.Modal(document.getElementById('chartModal'));
+  let chartInstance = null;
+  document.getElementById('btnChart').addEventListener('click', ()=> {
+    chartModal.show();
+    setTimeout(()=> {
+      const ctx = document.getElementById('chartCanvas').getContext('2d');
+      const data = [counts.putra||0, counts.putri||0, counts.umum||0];
+      if(chartInstance) chartInstance.destroy();
+      chartInstance = new Chart(ctx, { type:'bar', data:{ labels:['Putra','Putri','Bangunan Umum'], datasets:[{ label:'Jumlah', data, backgroundColor:['#1f78b4','#33a02c','#ff7f00'] }] }, options:{ responsive:true, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true } } } });
+    },150);
+  });
+
+  document.getElementById('btnZoomAll').addEventListener('click', ()=> { fitBoundsIfReady(); });
+
+  // ================= ROUTING (ORS) =================
+  let routeLayer = null;
+  let routeSteps = []; // steps array for panel
+  let routingActive = false;
+  let routingPoints = [];
+  const tempMarkers = L.layerGroup().addTo(map);
+
+  function profileForORS(modeVal){
+    // map select values to ORS profile names
+    switch(modeVal){
+      case 'motor': return 'driving-car';
+      case 'bike': return 'cycling-regular';
+      case 'foot': return 'foot-walking';
+      default: return 'driving-car';
+    }
+  }
+
+  // create transport mode control + route info control using Leaflet control
+  const transportControl = L.control({ position:'topright' });
+  transportControl.onAdd = function(){
+    const div = L.DomUtil.create('div', 'transport-panel bg-white rounded p-2');
+    div.style.display = 'none';
+    div.innerHTML = `<label class="fw-bold small">Mode Transportasi</label><select id="routeMode" class="form-select form-select-sm mt-1"><option value="driving">Mobil</option><option value="motor">Motor</option><option value="bike">Sepeda</option><option value="foot">Jalan Kaki</option></select>`;
+    return div;
+  };
+  transportControl.addTo(map);
+
+  const infoControl = L.control({ position:'bottomright' });
+  infoControl.onAdd = function(){
+    const div = L.DomUtil.create('div', 'route-info bg-white rounded p-2');
+    div.style.display = 'none';
+    div.style.minWidth = '220px';
+    div.innerHTML = `<h6 class="fw-bold mb-1">Info Rute</h6><div id="routeSummary" class="text-muted small">Belum ada rute.</div><div id="routeStepsPanel" class="mt-2" style="max-height:220px;overflow:auto;"></div><button id="clearRouteBtn" class="btn btn-sm btn-outline-danger mt-2 w-100">Hapus Rute</button>`;
+    return div;
+  };
+  infoControl.addTo(map);
+
+  // Activate routing mode via EasyButton
+  L.easyButton('<span title="Rute">🛣️</span>', function(btn, map){
+    const modePanelEl = document.querySelector('.transport-panel');
+    const infoPanelEl = document.querySelector('.route-info');
+    const modeSelect = document.getElementById('routeMode');
+
+    // toggle
+    if(!routingActive){
+      routingActive = true;
+      routingPoints = [];
+      tempMarkers.clearLayers();
+      btn.button.style.backgroundColor = 'gold';
+      modePanelEl.style.display = 'block';
+      infoPanelEl.style.display = 'block';
+      document.getElementById('routeSummary').textContent = 'Pilih dua titik di peta atau klik fitur untuk membuat rute.';
+      alert('Mode rute aktif. Klik dua titik atau klik fitur untuk jadi titik rute.');
+    } else {
+      routingActive = false;
+      btn.button.style.backgroundColor = 'white';
+      modePanelEl.style.display = 'none';
+      infoPanelEl.style.display = 'none';
+      clearRoute();
+    }
+
+    // reset click handlers
+    map.off('click', onMapClickForRouting);
+    if(routingActive) map.on('click', onMapClickForRouting);
+
+  }).addTo(map);
+
+  function onMapClickForRouting(e){
+    addRoutingPoint(e.latlng);
+  }
+
+  function addRoutingPoint(latlng){
+    if(!routingActive) return;
+    routingPoints.push(latlng);
+    L.circleMarker(latlng, { radius:6, color:'#111', fillColor: '#F4C542', fillOpacity:1 }).addTo(tempMarkers);
+
+    if(routingPoints.length >= 2){
+      // take first two points only
+      const a = routingPoints[0], b = routingPoints[1];
+      const modeSelect = document.getElementById('routeMode');
+      const profile = profileForORS(modeSelect ? modeSelect.value : 'driving');
+
+      // build POST body coordinates as [lon,lat]
+      const body = { coordinates: [[a.lng, a.lat],[b.lng, b.lat]] };
+
+      fetch(`https://api.openrouteservice.org/v2/directions/${profile}/geojson`, {
+        method: 'POST',
+        headers: { 'Authorization': ORS_API_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+      .then(r=>{
+        if(!r.ok) throw new Error('Routing request failed: ' + r.status);
+        return r.json();
+      })
+      .then(data=>{
+        // remove previous route
+        if(routeLayer) map.removeLayer(routeLayer);
+        // the geometry is in data.features[0].geometry.coordinates (lon,lat)
+        const coords = data.features[0].geometry.coordinates.map(c=> [c[1], c[0]]);
+        routeLayer = L.polyline(coords, { color:'#F4C542', weight:6, opacity:0.95 }).addTo(map);
+        map.fitBounds(routeLayer.getBounds().pad(0.08));
+
+        // summary & steps
+        const summary = data.features[0].properties.summary || {};
+        const segments = data.features[0].properties.segments || [];
+        const distKm = (summary.distance/1000).toFixed(2);
+        const timeMin = Math.ceil(summary.duration/60);
+        document.getElementById('routeSummary').innerHTML = `<b>Jarak:</b> ${distKm} km &nbsp; <b>Waktu:</b> ${timeMin} menit`;
+
+        // build step list
+        const stepsPanel = document.getElementById('routeStepsPanel');
+        stepsPanel.innerHTML = '';
+        if(segments.length && segments[0].steps && segments[0].steps.length){
+          const ul = document.createElement('ol'); ul.style.paddingLeft='18px'; ul.style.margin='0';
+          segments[0].steps.forEach(s=>{
+            const li = document.createElement('li');
+            li.style.marginBottom='8px';
+            // instruction text
+            li.innerHTML = `${s.instruction} <br><small class="text-muted">${(s.distance>1000? (s.distance/1000).toFixed(2)+' km': Math.round(s.distance)+' m')} · ${(Math.round(s.duration/60))} min</small>`;
+            ul.appendChild(li);
+          });
+          stepsPanel.appendChild(ul);
+        } else {
+          stepsPanel.innerHTML = '<div class="text-muted small">Tidak ada langkah terperinci.</div>';
+        }
+
+        // cleanup
+        routingActive = false;
+        routingPoints = [];
+        setTimeout(()=> tempMarkers.clearLayers(), 900);
+      })
+      .catch(err=>{
+        alert('Gagal mengambil rute: ' + err.message);
+        routingPoints = [];
+        tempMarkers.clearLayers();
+      });
+    }
+  }
+
+  // clear route function
+  function clearRoute(){
+    if(routeLayer) { map.removeLayer(routeLayer); routeLayer = null; }
+    if(tempMarkers) tempMarkers.clearLayers();
+    routingPoints = [];
+    document.getElementById('routeSummary').textContent = 'Belum ada rute.';
+    document.getElementById('routeStepsPanel').innerHTML = '';
+  }
+
+  // Hook GeoJSON click -> routing (when routingActive)
+  function enableRouteOnGeoJSON(layer){
+    layer.on('click', function(e){
+      if(routingActive) addRoutingPoint(e.latlng);
+    });
+  }
+  // apply after layers load (safe delay)
+  setTimeout(()=> {
+    try{ putraLayer.eachLayer(enableRouteOnGeoJSON); putriLayer.eachLayer(enableRouteOnGeoJSON); umumLayer.eachLayer(enableRouteOnGeoJSON); }catch(e){}
+  }, 1200);
+
+  // Clear route button
+  document.addEventListener('click', (ev)=>{
+    if(ev.target && ev.target.id === 'clearRouteBtn') clearRoute();
+  });
+
+  // EasyButtons: basemap, legend, locate, sidebar
+  L.easyButton('<span title="Basemap">🗺️</span>', function(btn,map){ basemapPanel.style.display = (basemapPanel.style.display==='block')? 'none':'block'; document.getElementById('legendPanel').style.display = 'none'; }, 'Basemap').addTo(map);
+  L.easyButton('<span title="Legenda">📘</span>', function(btn,map){ document.getElementById('legendPanel').style.display = (document.getElementById('legendPanel').style.display==='block')? 'none':'block'; basemapPanel.style.display = 'none'; }, 'Legenda').addTo(map);
+  // ==========================
+// FITUR LOKASI SAYA AKURAT
+// ==========================
+L.easyButton('<span title="Lokasi Saya">📍</span>', function(btn, map) {
+  // Aktifkan GPS dengan akurasi tinggi
+  map.locate({
+    setView: true,
+    maxZoom: 18,              // zoom otomatis mendekat
+    enableHighAccuracy: true, // gunakan GPS akurat
+    timeout: 10000,           // batas waktu pencarian
+    watch: false              // hanya sekali ambil lokasi
+  });
+}, 'Tampilkan Lokasi Saya').addTo(map);
+
+// Ketika lokasi ditemukan
+map.on('locationfound', function(e) {
+  const radius = e.accuracy; // meter
+  const userMarker = L.marker(e.latlng, {
+    icon: L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/64/64113.png',
+      iconSize: [35, 35],
+      iconAnchor: [17, 34],
+      popupAnchor: [0, -28]
+    })
+  }).addTo(map);
+
+  userMarker.bindPopup(`
+    <b>📍 Lokasi Anda</b><br>
+    Akurasi: ${radius.toFixed(1)} meter
+  `).openPopup();
+
+  // Tambah lingkaran akurasi
+  L.circle(e.latlng, {
+    radius: radius,
+    color: '#F4C542',
+    weight: 2,
+    fillColor: '#F4C542',
+    fillOpacity: 0.2
+  }).addTo(map);
+
+  // Fokus ke lokasi
+  map.setView(e.latlng, 18); // zoom langsung ke titik user
+});
+
+// Kalau gagal menemukan lokasi
+map.on('locationerror', function(e) {
+  alert('❌ Tidak dapat menemukan lokasi Anda.\nPastikan izin lokasi diaktifkan untuk situs ini.');
+});
+
+  L.easyButton('<span title="Kontrol">☰</span>', function(btn,map){ sidebar.style.display = (sidebar.style.display==='block')? 'none':'block'; }, 'Kontrol Peta').addTo(map);
+
+  // Close basemap panel if click outside
+  document.addEventListener('click', function(ev){
+    if(!ev.target.closest('.basemap-panel') && !ev.target.closest('[title="Basemap"]')) basemapPanel.style.display='none';
+  });
+
+  // Build search index shortly after layers loaded
+  setTimeout(buildSearchIndex, 1200);
+
+  // UX helpers
+  map.on('locationerror', ()=> alert('Tidak dapat mendapatkan lokasi. Periksa izin browser.'));
+  document.addEventListener('keydown', e=> { if(e.key==='Escape'){ sidebar.style.display='none'; basemapPanel.style.display='none'; document.getElementById('legendPanel').style.display='none'; document.getElementById('routeModePanel').style.display='none'; document.getElementById('routingInstructions').style.display='none'; } });
+  window.addEventListener('resize', ()=> map.invalidateSize());
+
+  </script>
+</body>
+</html>
